@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>IFSC Validation Suite - Guardor</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+            rel="stylesheet"
+    />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#017FC1",
+                        secondary: "#005581",
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    borderRadius: {
+                        none: "0px",
+                        sm: "4px",
+                        DEFAULT: "8px",
+                        md: "12px",
+                        lg: "16px",
+                        xl: "20px",
+                        "2xl": "24px",
+                        "3xl": "32px",
+                        full: "9999px",
+                        button: "8px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        :where([class^="ri-"])::before {
+            font-family: 'remixicon', sans-serif;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+</head>
+<body
+        class="bg-gradient-to-br from-slate-50 to-blue-50 h-screen overflow-hidden"
+>
+<!-- App Layout -->
+<div class="flex h-full">
+    <!-- Sidebar -->
+    <div
+            class="w-64 bg-white/80 backdrop-blur-xl shadow-xl border-r border-white/20 flex flex-col"
+    >
+        <!-- Logo -->
+        <div class="p-6 border-b border-white/10">
+            <div class="flex items-center">
+                <img
+                        alt="Guardor"
+                        class="h-10 w-auto object-contain"
+                        src="guardor.svg"
+                />
+                <div class="ml-3">
+                    <h1 class="text-lg font-semibold text-slate-800">Guardor</h1>
+                    <p class="text-xs text-slate-500 font-medium">IFSC Validation Suite</p>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation -->
+        <nav class="flex-1 p-6">
+            <ul class="space-y-3">
+                <li>
+                    <button
+                            class="nav-item w-full flex items-center px-5 py-4 text-left rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25"
+                            data-section="dashboard"
+                    >
+                        <i
+                                class="ri-dashboard-line mr-4 w-5 h-5 flex items-center justify-center"
+                        ></i>
+                        Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button
+                            class="nav-item w-full flex items-center px-5 py-4 text-left rounded-xl text-slate-600 hover:bg-white/60 hover:text-slate-800 transition-all duration-200"
+                            data-section="validate"
+                    >
+                        <i
+                                class="ri-search-line mr-4 w-5 h-5 flex items-center justify-center"
+                        ></i>
+                        Quick Validate
+                    </button>
+                </li>
+                <li>
+                    <button
+                            class="nav-item w-full flex items-center px-5 py-4 text-left rounded-xl text-slate-600 hover:bg-white/60 hover:text-slate-800 transition-all duration-200"
+                            data-section="bulk"
+                    >
+                        <i
+                                class="ri-file-list-3-line mr-4 w-5 h-5 flex items-center justify-center"
+                        ></i>
+                        Bulk Validation
+                    </button>
+                </li>
+                <li>
+                    <button
+                            class="nav-item w-full flex items-center px-5 py-4 text-left rounded-xl text-slate-600 hover:bg-white/60 hover:text-slate-800 transition-all duration-200"
+                            data-section="api"
+                    >
+                        <i
+                                class="ri-code-s-slash-line mr-4 w-5 h-5 flex items-center justify-center"
+                        ></i>
+                        API Management
+                    </button>
+                </li>
+                <li>
+                    <button
+                            class="nav-item w-full flex items-center px-5 py-4 text-left rounded-xl text-slate-600 hover:bg-white/60 hover:text-slate-800 transition-all duration-200"
+                            data-section="history"
+                    >
+                        <i
+                                class="ri-history-line mr-4 w-5 h-5 flex items-center justify-center"
+                        ></i>
+                        History
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <!-- User Profile -->
+        <div class="p-6 border-t border-white/10">
+            <div class="flex items-center">
+                <div
+                        class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg"
+                >
+                    <i class="ri-user-line text-white text-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <div class="text-sm font-semibold text-slate-800">Allison Burgers</div>
+                    <div
+                            class="text-xs text-slate-500 bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent font-medium"
+                    >
+                        Premium Plan
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Bar -->
+        <header
+                class="bg-white/70 backdrop-blur-xl shadow-sm border-b border-white/20 px-8 py-6"
+        >
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2
+                            class="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent"
+                            id="page-title"
+                    >
+                        Dashboard
+                    </h2>
+                    <p class="text-slate-500 mt-1" id="page-subtitle">
+                        Overview of your IFSC validation activities
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button
+                            class="w-11 h-11 flex items-center justify-center bg-white/80 rounded-xl hover:bg-white shadow-sm hover:shadow-md transition-all duration-200"
+                    >
+                        <i class="ri-notification-line text-slate-600"></i>
+                    </button>
+                    <button
+                            class="w-11 h-11 flex items-center justify-center bg-white/80 rounded-xl hover:bg-white shadow-sm hover:shadow-md transition-all duration-200"
+                    >
+                        <i class="ri-settings-line text-slate-600"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- Content Area -->
+        <main class="flex-1 overflow-y-auto p-8">
+            <!-- Dashboard Section -->
+            <div class="section-content" id="dashboard-section">
+                <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10"
+                >
+                    <div
+                            class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-7 border border-white/20 hover:shadow-xl transition-all duration-300"
+                    >
+                        <div class="flex items-center">
+                            <div
+                                    class="w-14 h-14 flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg shadow-blue-500/25"
+                            >
+                                <i class="ri-search-line text-2xl text-white"></i>
+                            </div>
+                            <div class="ml-5">
+                                <div class="text-3xl font-bold text-slate-800">0</div>
+                                <div class="text-sm text-slate-500 font-medium">
+                                    Total Validations
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-7 border border-white/20 hover:shadow-xl transition-all duration-300"
+                    >
+                        <div class="flex items-center">
+                            <div
+                                    class="w-14 h-14 flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl shadow-lg shadow-emerald-500/25"
+                            >
+                                <i class="ri-check-line text-2xl text-white"></i>
+                            </div>
+                            <div class="ml-5">
+                                <div class="text-3xl font-bold text-slate-800">0</div>
+                                <div class="text-sm text-slate-500 font-medium">
+                                    Successful
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-7 border border-white/20 hover:shadow-xl transition-all duration-300"
+                    >
+                        <div class="flex items-center">
+                            <div
+                                    class="w-14 h-14 flex items-center justify-center bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl shadow-lg shadow-rose-500/25"
+                            >
+                                <i class="ri-close-line text-2xl text-white"></i>
+                            </div>
+                            <div class="ml-5">
+                                <div class="text-3xl font-bold text-slate-800">0</div>
+                                <div class="text-sm text-slate-500 font-medium">Failed</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-7 border border-white/20 hover:shadow-xl transition-all duration-300"
+                    >
+                        <div class="flex items-center">
+                            <div
+                                    class="w-14 h-14 flex items-center justify-center bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl shadow-lg shadow-amber-500/25"
+                            >
+                                <i class="ri-time-line text-2xl text-white"></i>
+                            </div>
+                            <div class="ml-5">
+                                <div class="text-3xl font-bold text-slate-800">9,999</div>
+                                <div class="text-sm text-slate-500 font-medium">
+                                    API Calls Left
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <div
+                                class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/20"
+                        >
+                            <h3 class="text-xl font-bold text-slate-800 mb-6">
+                                Quick Validation
+                            </h3>
+                            <div class="flex gap-4">
+                                <input
+                                        class="flex-1 px-5 py-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none bg-white/70 backdrop-blur-sm text-slate-800 placeholder-slate-400"
+                                        id="dashboard-ifsc-input"
+                                        placeholder="Enter IFSC Code"
+                                        type="text"
+                                />
+                                <button
+                                        class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-xl hover:shadow-lg hover:shadow-primary/25 transition-all duration-200 font-semibold whitespace-nowrap !rounded-button"
+                                        id="dashboard-validate-btn"
+                                >
+                                    Validate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div
+                                class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/20"
+                        >
+                            <h3 class="text-xl font-bold text-slate-800 mb-6">
+                                Recent Activity
+                            </h3>
+                            <div class="space-y-4">
+                                <div
+                                        class="flex items-center justify-between p-4 bg-gradient-to-r from-emerald-50 to-emerald-100/50 rounded-xl border border-emerald-200/50"
+                                >
+                                    <div>
+                                        <div
+                                                class="font-mono text-sm font-semibold text-slate-800"
+                                        >
+                                            HDFC0000123
+                                        </div>
+                                        <div class="text-xs text-slate-500">2 minutes ago</div>
+                                    </div>
+                                    <div
+                                            class="w-8 h-8 flex items-center justify-center bg-emerald-500 rounded-lg shadow-sm"
+                                    >
+                                        <i class="ri-check-line text-white text-sm"></i>
+                                    </div>
+                                </div>
+                                <div
+                                        class="flex items-center justify-between p-4 bg-gradient-to-r from-emerald-50 to-emerald-100/50 rounded-xl border border-emerald-200/50"
+                                >
+                                    <div>
+                                        <div
+                                                class="font-mono text-sm font-semibold text-slate-800"
+                                        >
+                                            SBIN0000456
+                                        </div>
+                                        <div class="text-xs text-slate-500">5 minutes ago</div>
+                                    </div>
+                                    <div
+                                            class="w-8 h-8 flex items-center justify-center bg-emerald-500 rounded-lg shadow-sm"
+                                    >
+                                        <i class="ri-check-line text-white text-sm"></i>
+                                    </div>
+                                </div>
+                                <div
+                                        class="flex items-center justify-between p-4 bg-gradient-to-r from-rose-50 to-rose-100/50 rounded-xl border border-rose-200/50"
+                                >
+                                    <div>
+                                        <div
+                                                class="font-mono text-sm font-semibold text-slate-800"
+                                        >
+                                            INVALID123
+                                        </div>
+                                        <div class="text-xs text-slate-500">8 minutes ago</div>
+                                    </div>
+                                    <div
+                                            class="w-8 h-8 flex items-center justify-center bg-rose-500 rounded-lg shadow-sm"
+                                    >
+                                        <i class="ri-close-line text-white text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Validate Section -->
+            <div class="section-content hidden" id="validate-section">
+                <div class="max-w-4xl">
+                    <div
+                            class="bg-white rounded-xl shadow-sm p-8 border border-gray-200"
+                    >
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                            IFSC Code Validation
+                        </h3>
+                        <div class="space-y-6">
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <div class="flex-1">
+                                    <input
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-lg"
+                                            id="main-ifsc-input"
+                                            placeholder="Enter IFSC Code (e.g., HDFC0000123)"
+                                            type="text"
+                                    />
+                                </div>
+                                <button
+                                        class="bg-primary text-white px-8 py-3 rounded-lg hover:bg-secondary transition-colors font-semibold whitespace-nowrap !rounded-button"
+                                        id="validate-btn"
+                                >
+                                    <i class="ri-search-line mr-2"></i>Validate
+                                </button>
+                            </div>
+                            <!-- Results Display -->
+                            <div class="hidden" id="validation-results">
+                                <div class="border-t border-gray-200 pt-6">
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-4">
+                                        Validation Results
+                                    </h4>
+                                    <div class="space-y-4" id="results-content">
+                                        <!-- Results will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bulk Section -->
+            <div class="section-content hidden" id="bulk-section">
+                <div class="max-w-4xl">
+                    <div
+                            class="bg-white rounded-xl shadow-sm p-8 border border-gray-200"
+                    >
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                            Bulk Validation
+                        </h3>
+                        <div class="space-y-6">
+                            <div
+                                    class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
+                                    id="upload-zone"
+                            >
+                                <div
+                                        class="w-16 h-16 flex items-center justify-center mx-auto mb-4"
+                                >
+                                    <i
+                                            class="ri-upload-cloud-2-line text-4xl text-gray-400"
+                                    ></i>
+                                </div>
+                                <p class="text-xl font-medium text-gray-900 mb-2">
+                                    Drop your file here or click to browse
+                                </p>
+                                <p class="text-sm text-gray-500 mb-6">
+                                    Supports CSV, Excel files up to 10MB
+                                </p>
+                                <input
+                                        accept=".csv,.xlsx,.xls"
+                                        class="hidden"
+                                        id="file-input"
+                                        type="file"
+                                />
+                                <button
+                                        class="bg-primary text-white px-8 py-3 rounded-lg hover:bg-secondary transition-colors !rounded-button whitespace-nowrap"
+                                >
+                                    Choose File
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <a
+                                        class="text-primary hover:text-secondary transition-colors font-medium"
+                                        href="#"
+                                >
+                                    <i class="ri-download-line mr-2"></i>Download Sample File
+                                </a>
+                                <div class="text-sm text-gray-500">
+                                    Format: IFSC codes in first column
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- API Section -->
+            <div class="section-content hidden" id="api-section">
+                <div class="max-w-4xl">
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div
+                                class="bg-white rounded-xl shadow-sm p-8 border border-gray-200"
+                        >
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                                API Key Management
+                            </h3>
+                            <div class="space-y-6">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-medium text-gray-700"
+                        >API Key</span
+                        >
+                                        <button
+                                                class="text-primary hover:text-secondary transition-colors"
+                                        >
+                                            <i class="ri-refresh-line"></i>
+                                        </button>
+                                    </div>
+                                    <div
+                                            class="font-mono text-sm text-gray-600 bg-white p-3 rounded border"
+                                    >
+                                        sk_test_4eC39HqLyjWDarjtT1zdp7dc
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                        <div class="text-3xl font-bold text-primary">1,247</div>
+                                        <div class="text-sm text-gray-600">Requests Used</div>
+                                    </div>
+                                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                                        <div class="text-3xl font-bold text-green-600">
+                                            8,753
+                                        </div>
+                                        <div class="text-sm text-gray-600">Remaining</div>
+                                    </div>
+                                </div>
+                                <button
+                                        class="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition-colors !rounded-button whitespace-nowrap"
+                                >
+                                    Generate New Key
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                                class="bg-white rounded-xl shadow-sm p-8 border border-gray-200"
+                        >
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                                Usage Statistics
+                            </h3>
+                            <div class="space-y-4">
+                                <div
+                                        class="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
+                                >
+                                    <span class="text-gray-700">Today</span>
+                                    <span class="font-semibold">47 requests</span>
+                                </div>
+                                <div
+                                        class="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
+                                >
+                                    <span class="text-gray-700">This Week</span>
+                                    <span class="font-semibold">312 requests</span>
+                                </div>
+                                <div
+                                        class="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
+                                >
+                                    <span class="text-gray-700">This Month</span>
+                                    <span class="font-semibold">1,247 requests</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- History Section -->
+            <div class="section-content hidden" id="history-section">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-2xl font-bold text-gray-900">
+                            Validation History
+                        </h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    IFSC Code
+                                </th>
+                                <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Bank
+                                </th>
+                                <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Branch
+                                </th>
+                                <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Status
+                                </th>
+                                <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Date
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-mono text-sm">
+                                    HDFC0000123
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                                >
+                                    HDFC Bank
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                                >
+                                    Mumbai Main
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                        <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800"
+                        >Valid</span
+                        >
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    2025-01-28 14:30
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-mono text-sm">
+                                    SBIN0000456
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                                >
+                                    State Bank of India
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                                >
+                                    Delhi Central
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                        <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800"
+                        >Valid</span
+                        >
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    2025-01-28 14:25
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-mono text-sm">
+                                    INVALID123
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    -
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    -
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                        <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"
+                        >Invalid</span
+                        >
+                                </td>
+                                <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    2025-01-28 14:22
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script id="navigation-script">
+    document.addEventListener("DOMContentLoaded", function () {
+      const navItems = document.querySelectorAll(".nav-item");
+      const sections = document.querySelectorAll(".section-content");
+      const pageTitle = document.getElementById("page-title");
+      const pageSubtitle = document.getElementById("page-subtitle");
+      const sectionData = {
+        dashboard: {
+          title: "Dashboard",
+          subtitle: "Overview of your IFSC validation activities",
+        },
+        validate: {
+          title: "Quick Validate",
+          subtitle: "Validate individual IFSC codes instantly",
+        },
+        bulk: {
+          title: "Bulk Validation",
+          subtitle: "Upload and validate multiple IFSC codes at once",
+        },
+        api: {
+          title: "API Management",
+          subtitle: "Manage your API keys and view usage statistics",
+        },
+        history: {
+          title: "Validation History",
+          subtitle: "View your past validation requests and results",
+        },
+      };
+      function showSection(sectionName) {
+        // Hide all sections
+        sections.forEach((section) => {
+          section.classList.add("hidden");
+        });
+        // Show selected section
+        const targetSection = document.getElementById(sectionName + "-section");
+        if (targetSection) {
+          targetSection.classList.remove("hidden");
+        }
+        // Update navigation active state
+        navItems.forEach((item) => {
+          item.classList.remove(
+            "bg-gradient-to-r",
+            "from-primary",
+            "to-secondary",
+            "text-white",
+            "shadow-lg",
+            "shadow-primary/25",
+          );
+          item.classList.add(
+            "text-slate-600",
+            "hover:bg-white/60",
+            "hover:text-slate-800",
+          );
+        });
+        // Set active navigation item
+        const activeItem = document.querySelector(
+          `[data-section="${sectionName}"]`,
+        );
+        if (activeItem) {
+          activeItem.classList.add(
+            "bg-gradient-to-r",
+            "from-primary",
+            "to-secondary",
+            "text-white",
+            "shadow-lg",
+            "shadow-primary/25",
+          );
+          activeItem.classList.remove(
+            "text-slate-600",
+            "hover:bg-white/60",
+            "hover:text-slate-800",
+          );
+        }
+        // Update page title and subtitle
+        if (sectionData[sectionName]) {
+          pageTitle.textContent = sectionData[sectionName].title;
+          pageSubtitle.textContent = sectionData[sectionName].subtitle;
+        }
+      }
+      navItems.forEach((item) => {
+        item.addEventListener("click", function () {
+          const section = this.getAttribute("data-section");
+          showSection(section);
+        });
+      });
+      // Show dashboard by default
+      showSection("dashboard");
+    });
+</script>
+<script id="validation-script">
+    document.addEventListener("DOMContentLoaded", function () {
+      const validateBtn = document.getElementById("validate-btn");
+      const mainInput = document.getElementById("main-ifsc-input");
+      const heroInput = document.getElementById("hero-ifsc-input");
+      const resultsDiv = document.getElementById("validation-results");
+      const resultsContent = document.getElementById("results-content");
+      async function validateIFSC(ifscCode) {
+        console.log('Validating IFSC:', ifscCode);
+
+        // Try direct API first, then fallback to CORS proxy if needed
+        const apiUrls = [
+          `https://ifsc.guardor.in/validate/${ifscCode}`,
+          `https://cors-anywhere.herokuapp.com/https://ifsc.guardor.in/validate/${ifscCode}`,
+          `https://api.allorigins.win/get?url=${encodeURIComponent(`https://ifsc.guardor.in/validate/${ifscCode}`)}`
+        ];
+
+        for (let i = 0; i < apiUrls.length; i++) {
+          try {
+            console.log(`Trying API URL ${i + 1}:`, apiUrls[i]);
+
+            let response;
+            let result;
+
+            if (i === 2) { // allorigins proxy
+              response = await fetch(apiUrls[i]);
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              const proxyResult = await response.json();
+              result = JSON.parse(proxyResult.contents);
+            } else {
+              response = await fetch(apiUrls[i], {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                }
+              });
+
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+
+              result = await response.json();
+            }
+
+            console.log('API Response:', result);
+
+            if (result.success && result.data && result.data.valid) {
+              const bankData = {
+                bank: result.data.bank_data.bank,
+                branch: result.data.bank_data.branch,
+                address: result.data.bank_data.address,
+                contact: result.data.bank_data.contact,
+                city: result.data.bank_data.city,
+                rtgs: result.data.bank_data.rtgs,
+                neft: result.data.bank_data.neft,
+                imps: result.data.bank_data.imps
+              };
+              console.log('Processed bank data:', bankData);
+              return {
+                success: true,
+                data: bankData
+              };
+            } else if (result.success === false) {
+              return { 
+                success: false, 
+                error: result.message || "Invalid IFSC code" 
+              };
+            } else {
+              return { 
+                success: false, 
+                error: "Invalid response format from server" 
+              };
+            }
+          } catch (error) {
+            console.error(`API URL ${i + 1} failed:`, error);
+
+            // If this is the last URL, return error
+            if (i === apiUrls.length - 1) {
+              if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                return { 
+                  success: false, 
+                  error: "Unable to connect to IFSC validation service. This might be due to CORS restrictions. Please try using the backend API instead of the browser." 
+                };
+              }
+              return { 
+                success: false, 
+                error: `Network error: ${error.message}` 
+              };
+            }
+
+            // Continue to next URL
+            continue;
+          }
+        }
+      }
+      function displayResults(result, ifscCode) {
+        if (result.success) {
+          const data = result.data;
+          const servicesAvailable = [];
+          if (data.rtgs) servicesAvailable.push('RTGS');
+          if (data.neft) servicesAvailable.push('NEFT');
+          if (data.imps) servicesAvailable.push('IMPS');
+
+          resultsContent.innerHTML = `
+    <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+    <div class="flex items-center mb-4">
+    <div class="w-8 h-8 flex items-center justify-center bg-green-100 rounded-full mr-3">
+    <i class="ri-check-line text-green-600"></i>
+    </div>
+    <h4 class="text-lg font-semibold text-green-800">Valid IFSC Code</h4>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4">
+    <div>
+    <div class="mb-3">
+    <label class="text-sm font-medium text-gray-600">IFSC Code</label>
+    <div class="font-mono text-lg font-bold text-gray-900">${ifscCode}</div>
+    </div>
+    <div class="mb-3">
+    <label class="text-sm font-medium text-gray-600">Bank Name</label>
+    <div class="text-gray-900 font-medium">${data.bank}</div>
+    </div>
+    <div class="mb-3">
+    <label class="text-sm font-medium text-gray-600">Branch</label>
+    <div class="text-gray-900">${data.branch}</div>
+    </div>
+    <div class="mb-3">
+    <label class="text-sm font-medium text-gray-600">City</label>
+    <div class="text-gray-900">${data.city}</div>
+    </div>
+    </div>
+    <div>
+    <div class="mb-3">
+    <label class="text-sm font-medium text-gray-600">Address</label>
+    <div class="text-gray-900">${data.address}</div>
+    </div>
+    <div class="mb-3">
+    <label class="text-sm font-medium text-gray-600">Contact</label>
+    <div class="text-gray-900">${data.contact || 'Not available'}</div>
+    </div>
+    <div class="mb-3">
+    <label class="text-sm font-medium text-gray-600">Available Services</label>
+    <div class="flex flex-wrap gap-2 mt-1">
+    ${servicesAvailable.map(service => `
+      <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">${service}</span>
+    `).join('')}
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="mt-4 flex space-x-3">
+    <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors text-sm !rounded-button whitespace-nowrap">
+    <i class="ri-file-copy-line mr-1"></i>Copy Details
+    </button>
+    <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors text-sm !rounded-button whitespace-nowrap">
+    <i class="ri-download-line mr-1"></i>Export
+    </button>
+    </div>
+    </div>
+    `;
+        } else {
+          resultsContent.innerHTML = `
+    <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+    <div class="flex items-center mb-4">
+    <div class="w-8 h-8 flex items-center justify-center bg-red-100 rounded-full mr-3">
+    <i class="ri-close-line text-red-600"></i>
+    </div>
+    <h4 class="text-lg font-semibold text-red-800">Invalid IFSC Code</h4>
+    </div>
+    <p class="text-red-700">${result.error}</p>
+    <div class="mt-4">
+    <p class="text-sm text-red-600">Please check the IFSC code and try again. Make sure it follows the format: ABCD0123456</p>
+    </div>
+    </div>
+    `;
+        }
+        resultsDiv.classList.remove("hidden");
+      }
+      validateBtn.addEventListener("click", async function () {
+        const ifscCode = mainInput.value.trim().toUpperCase();
+        if (!ifscCode) {
+          alert("Please enter an IFSC code");
+          return;
+        }
+        validateBtn.innerHTML =
+          '<i class="ri-loader-4-line mr-2 animate-spin"></i>Validating...';
+        validateBtn.disabled = true;
+        try {
+          console.log('Starting validation for:', ifscCode);
+          const result = await validateIFSC(ifscCode);
+          console.log('Validation result:', result);
+          displayResults(result, ifscCode);
+        } catch (error) {
+          console.error('Validation handler error:', error);
+          displayResults(
+            { success: false, error: `Validation failed: ${error.message}` },
+            ifscCode,
+          );
+        } finally {
+          validateBtn.innerHTML = '<i class="ri-search-line mr-2"></i>Validate';
+          validateBtn.disabled = false;
+        }
+      });
+      mainInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          validateBtn.click();
+        }
+      });
+      // Dashboard validation functionality
+      const dashboardValidateBtn = document.getElementById(
+        "dashboard-validate-btn",
+      );
+      const dashboardInput = document.getElementById("dashboard-ifsc-input");
+
+      dashboardValidateBtn.addEventListener("click", async function () {
+        const ifscCode = dashboardInput.value.trim().toUpperCase();
+        if (!ifscCode) {
+          showNotification("Please enter an IFSC code", "error");
+          return;
+        }
+
+        dashboardValidateBtn.innerHTML =
+          '<i class="ri-loader-4-line mr-2 animate-spin"></i>Validating...';
+        dashboardValidateBtn.disabled = true;
+
+        try {
+          const result = await validateIFSC(ifscCode);
+          if (result.success) {
+            showNotification("IFSC code is valid!", "success");
+          } else {
+            showNotification(result.error, "error");
+          }
+        } catch (error) {
+          showNotification("Validation failed. Please try again.", "error");
+        } finally {
+          dashboardValidateBtn.innerHTML = "Validate";
+          dashboardValidateBtn.disabled = false;
+        }
+      });
+
+      dashboardInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          dashboardValidateBtn.click();
+        }
+      });
+
+      function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+          type === "error" ? "bg-red-500 text-white" : "bg-green-500 text-white"
+        }`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+      }
+    });
+</script>
+<script id="file-upload-script">
+    document.addEventListener("DOMContentLoaded", function () {
+      const uploadZone = document.getElementById("upload-zone");
+      const fileInput = document.getElementById("file-input");
+      uploadZone.addEventListener("click", function () {
+        fileInput.click();
+      });
+      uploadZone.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        uploadZone.classList.add("border-primary", "bg-blue-50");
+      });
+      uploadZone.addEventListener("dragleave", function (e) {
+        e.preventDefault();
+        uploadZone.classList.remove("border-primary", "bg-blue-50");
+      });
+      uploadZone.addEventListener("drop", function (e) {
+        e.preventDefault();
+        uploadZone.classList.remove("border-primary", "bg-blue-50");
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFile(files[0]);
+        }
+      });
+      fileInput.addEventListener("change", function (e) {
+        if (e.target.files.length > 0) {
+          handleFile(e.target.files[0]);
+        }
+      });
+      function handleFile(file) {
+        console.log("File selected:", file.name);
+        // Handle file upload logic here
+      }
+    });
+</script>
+</body>
+</html>
